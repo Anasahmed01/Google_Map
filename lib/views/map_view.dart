@@ -14,13 +14,13 @@ class _SimpleMapScreenState extends State<MapView> {
   Completer<GoogleMapController> _controller = Completer();
 
   static final CameraPosition _keyGooglePlex =
-      CameraPosition(target: LatLng(24.834394, 67.180149), zoom: 14.4746);
+      CameraPosition(target: LatLng(24.9043140, 67.0576249), zoom: 14.4746);
 
   List<Marker> _marker = [];
   final List<Marker> _list = const [
     Marker(
         markerId: MarkerId("1"),
-        position: LatLng(24.834394, 67.180149),
+        position: LatLng(24.9043140, 67.0576249),
         infoWindow: InfoWindow(title: "My current location")),
     Marker(
         markerId: MarkerId("2"),
@@ -28,9 +28,9 @@ class _SimpleMapScreenState extends State<MapView> {
         infoWindow: InfoWindow(title: "My current location"))
   ];
 
+  LatLng point = LatLng(24.9043140, 67.0576249);
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _marker.addAll(_list);
   }
@@ -38,30 +38,35 @@ class _SimpleMapScreenState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Simple Google Map"),
-        centerTitle: true,
-      ),
       body: SafeArea(
         child: GoogleMap(
           initialCameraPosition: _keyGooglePlex,
           markers: Set<Marker>.of(_marker),
-          // mapType: MapType.normal,
-          // myLocationEnabled: true,
-          // compassEnabled: false,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          GoogleMapController controller = await _controller.future;
-          controller.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: LatLng(24.834394, 67.180149), zoom: 14)));
-          setState(() {});
-        },
-        child: Icon(Icons.location_disabled_outlined),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 90),
+        child: FloatingActionButton(
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          onPressed: () async {
+            GoogleMapController controller = await _controller.future;
+            controller.animateCamera(
+              CameraUpdate.newCameraPosition(
+                const CameraPosition(
+                    target: LatLng(24.9043140, 67.0576249), zoom: 14),
+              ),
+            );
+            setState(() {});
+          },
+          child: const Icon(
+            Icons.my_location_sharp,
+            color: Colors.blue,
+          ),
+        ),
       ),
     );
   }
